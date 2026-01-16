@@ -66,6 +66,8 @@ class RedmineOauthController < AccountController
           onthefly_creation_failed(user)
         end
       end
+      group = Group.find_by(lastname: 'SSO Users')
+      user.group_ids = [group.id] if group
     else
       # Existing record
       if user.active?
