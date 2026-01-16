@@ -66,8 +66,16 @@ class RedmineOauthController < AccountController
           onthefly_creation_failed(user)
         end
       end
-      group = Group.find_by(lastname: 'SSO Users')
-      user.group_ids = [group.id] if group
+      if settings['default_group_id'].present?
+        group = Group.find_by_id(settings['default_group_id'].to_i)
+        if group
+          group.users << user
+        end
+      else
+        # Fallback to 'Anonymous users' if no group is configured
+        group = Group.find_or_create_by(lastname: 'Anonymous users')
+        group.users << user
+      end
     else
       # Existing record
       if user.active?

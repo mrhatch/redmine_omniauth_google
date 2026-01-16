@@ -14,3 +14,10 @@
   <label>Oauth authentification:</label>
   <%= check_box_tag "settings[oauth_authentification]", true, @settings[:oauth_authentification] %>
 </p>
+<p>
+  <label><%= l(:default_group) %></label>
+  <%= select_tag 'settings[default_group_id]',
+      options_from_collection_for_select(Group.all, :id, :name, @settings['default_group_id'].to_i),
+      :include_blank => l(:label_none) %>
+  <br/><em><%= l(:text_default_group_for_sso_users) %></em>
+</p>
